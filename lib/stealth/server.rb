@@ -36,6 +36,7 @@ module Stealth
       if request.env['CONTENT_TYPE']&.match(/application\/json/i)
         json_params = MultiJson.load(request.body.read)
         params.merge!(json_params)
+        Stealth::Logger.l(topic: "params", message: "params: #{params}")
       end
 
       dispatcher = Stealth::Dispatcher.new(
