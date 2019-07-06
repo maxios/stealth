@@ -18,6 +18,7 @@ module Stealth
         @yaml_reply
       end
 
+      Stealth::Logger.l(topic: "reply_sent", message: load_replies(YAML.load(processed_reply)).inspect)
       @replies = load_replies(YAML.load(processed_reply))
     end
 

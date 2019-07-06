@@ -12,7 +12,8 @@ module Stealth
         class_attribute :_preprocessors, default: [:erb]
         class_attribute :_replies_path, default: [Stealth.root, 'bot', 'replies']
 
-        def send_replies
+        def send_replies(state: nil)
+          @reply_state = state if state.present?
           yaml_reply, preprocessor = action_replies
 
           service_reply = Stealth::ServiceReply.new(
@@ -90,6 +91,7 @@ module Stealth
           end
 
           def base_reply_filename
+            return "#{@reply_state}.yml" if @reply_state.present?
             "#{current_session.state_string}.yml"
           end
 
@@ -132,6 +134,7 @@ module Stealth
 
             begin
               file_contents = File.read(reply_file_path)
+              Stealth::Logger.l(topic: "reply_sent", message: file_contents.inspect)
             rescue Errno::ENOENT
               raise(Stealth::Errors::ReplyNotFound, "Could not find a reply in #{reply_dir}")
             end
