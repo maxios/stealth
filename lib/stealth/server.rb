@@ -11,6 +11,10 @@ module Stealth
       register Sinatra::Reloader
     end
 
+  configure :production, :development do
+    enable :logging
+  end
+
     def self.get_or_post(url, &block)
       get(url, &block)
       post(url, &block)
