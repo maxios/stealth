@@ -3,9 +3,13 @@
 
 require 'sinatra/base'
 require 'multi_json'
+require "sinatra/reloader"
 
 module Stealth
   class Server < Sinatra::Base
+    configure :development do
+      register Sinatra::Reloader
+    end
 
     def self.get_or_post(url, &block)
       get(url, &block)
